@@ -9,6 +9,8 @@ use Magento\Payment\Model\Config as PaymentConfig;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Quote\Model\ResourceModel\Quote\Address as AddressResource;
+use Magento\Quote\Model\ResourceModel\Quote\Payment as PaymentResource;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -39,6 +41,12 @@ class CustomerCheckout
      */
     private $cart;
 
+    /** @var AddressResource */
+    private $addressResource;
+
+    /** @var PaymentResource */
+    private $paymentResource;
+
     /**
      * @var int|null
      */
@@ -59,12 +67,14 @@ class CustomerCheckout
      */
     private $paymentMethodCode;
 
-    final public function __construct(
+    public function __construct(
         AddressRepositoryInterface $addressRepository,
         CartRepositoryInterface $quoteRepository,
         QuoteManagement $quoteManagement,
         PaymentConfig $paymentConfig,
         Cart $cart,
+        AddressResource $addressResource,
+        PaymentResource $paymentResource,
         ?int $shippingAddressId = null,
         ?int $billingAddressId = null,
         ?string $shippingMethodCode = null,
@@ -76,6 +86,8 @@ class CustomerCheckout
         $this->quoteManagement = $quoteManagement;
         $this->paymentConfig = $paymentConfig;
         $this->cart = $cart;
+        $this->addressResource = $addressResource;
+        $this->paymentResource = $paymentResource;
         $this->shippingAddressId = $shippingAddressId;
         $this->billingAddressId = $billingAddressId;
         $this->shippingMethodCode = $shippingMethodCode;
@@ -85,12 +97,14 @@ class CustomerCheckout
     public static function fromCart(Cart $cart): CustomerCheckout
     {
         $objectManager = Bootstrap::getObjectManager();
-        return new static(
+        return new self(
             $objectManager->create(AddressRepositoryInterface::class),
             $objectManager->create(CartRepositoryInterface::class),
             $objectManager->create(QuoteManagement::class),
             $objectManager->create(PaymentConfig::class),
-            $cart
+            $cart,
+            $objectManager->create(AddressResource::class),
+            $objectManager->create(PaymentResource::class)
         );
     }
 
@@ -176,15 +190,13 @@ class CustomerCheckout
         // addresses so customer_id matches, without the address-resetting side
         // effects of Quote::assignCustomer().
         $customer = $this->cart->getCustomerSession()->getCustomerData();
-        if ($customer && $customer->getId()) {
+        if ($customer->getId()) {
             $customerId = (int) $customer->getId();
             $reloadedQuote->setCustomerId($customerId);
             $reloadedQuote->setCustomerIsGuest(false);
             $reloadedQuote->setCustomerEmail($customer->getEmail());
             foreach ([$reloadedQuote->getBillingAddress(), $reloadedQuote->getShippingAddress()] as $address) {
-                if ($address) {
-                    $address->setCustomerId($customerId);
-                }
+                $address->setCustomerId($customerId);
             }
         }
         // Collect missing totals, like shipping
@@ -214,7 +226,7 @@ class CustomerCheckout
         $billingAddress->importCustomerAddressData(
             $this->addressRepository->getById($this->getCustomerBillingAddressId())
         );
-        $billingAddress->save();
+        $this->addressResource->save($billingAddress);
     }
 
     /**
@@ -229,7 +241,7 @@ class CustomerCheckout
         $shippingAddress->setCollectShippingRates(true);
         $shippingAddress->collectShippingRates();
         $shippingAddress->setShippingMethod($this->getShippingMethodCode());
-        $shippingAddress->save();
+        $this->addressResource->save($shippingAddress);
     }
 
     /**
@@ -239,6 +251,6 @@ class CustomerCheckout
     {
         $payment = $this->cart->getQuote()->getPayment();
         $payment->setMethod($this->getPaymentMethodCode());
-        $payment->save();
+        $this->paymentResource->save($payment);
     }
 }

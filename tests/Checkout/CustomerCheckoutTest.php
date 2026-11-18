@@ -9,9 +9,6 @@ use TddWizard\Fixtures\Customer\AddressBuilder;
 use TddWizard\Fixtures\Customer\CustomerBuilder;
 use TddWizard\Fixtures\Customer\CustomerFixturePool;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class CustomerCheckoutTest extends TestCase
 {
     /**
@@ -52,7 +49,7 @@ class CustomerCheckoutTest extends TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testCreateOrderFromCart()
+    public function testCreateOrderFromCart(): void
     {
         $this->customerFixtures->get()->login();
         $checkout = CustomerCheckout::fromCart(
@@ -69,7 +66,7 @@ class CustomerCheckoutTest extends TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testCreateOrderFromCartWithVirtualProduct()
+    public function testCreateOrderFromCartWithVirtualProduct(): void
     {
         $this->customerFixtures->get()->login();
         $checkout = CustomerCheckout::fromCart(

@@ -213,8 +213,6 @@ class CustomerBuilder
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) False positive: the method is used in build() on the cloned builder
-     *
      * @return CustomerInterface
      * @throws LocalizedException
      */

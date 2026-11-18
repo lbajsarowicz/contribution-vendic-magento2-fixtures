@@ -47,11 +47,10 @@ class CreditmemoBuilderTest extends TestCase
     /**
      * Create a credit memo for all the order's items.
      *
-     * @test
      *
      * @throws \Exception
      */
-    public function createCreditmemo()
+    public function testCreateCreditmemo(): void
     {
         $order = OrderBuilder::anOrder()->withPaymentMethod('checkmo')->build();
         $this->orderFixture = new OrderFixture($order);
@@ -65,10 +64,9 @@ class CreditmemoBuilderTest extends TestCase
     /**
      * Create a credit memo for some of the order's items.
      *
-     * @test
      * @throws \Exception
      */
-    public function createPartialCreditmemos()
+    public function testCreatePartialCreditmemos(): void
     {
         $order = OrderBuilder::anOrder()->withPaymentMethod('checkmo')->withProducts(
             ProductBuilder::aSimpleProduct()->withSku('foo'),

@@ -87,6 +87,7 @@ class CustomerFixture
     public function login(?Session $session = null): void
     {
         if ($session === null) {
+            /** @var \Magento\TestFramework\ObjectManager $objectManager */
             $objectManager = Bootstrap::getObjectManager();
             $objectManager->removeSharedInstance(Session::class);
             $session = $objectManager->get(Session::class);

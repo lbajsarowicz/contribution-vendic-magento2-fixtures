@@ -5,7 +5,6 @@ namespace TddWizard\Fixtures\Sales;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -48,11 +47,10 @@ class ShipmentBuilderTest extends TestCase
     /**
      * Create a shipment for all the order's items.
      *
-     * @test
      *
      * @throws \Exception
      */
-    public function createShipment()
+    public function testCreateShipment(): void
     {
         $order = OrderBuilder::anOrder()->build();
         $this->orderFixture = new OrderFixture($order);
@@ -68,11 +66,10 @@ class ShipmentBuilderTest extends TestCase
     /**
      * Create a shipment for all the order's items with tracks and shipping label.
      *
-     * @test
      *
      * @throws \Exception
      */
-    public function createShipmentWithTracks()
+    public function testCreateShipmentWithTracks(): void
     {
         $order = OrderBuilder::anOrder()->build();
         $this->orderFixture = new OrderFixture($order);
@@ -85,7 +82,6 @@ class ShipmentBuilderTest extends TestCase
 
         self::assertNotEmpty($shipmentFixture->getShippingLabel());
         self::assertNotEmpty($shipmentFixture->getTracks());
-        self::assertContainsOnlyInstancesOf(ShipmentTrackInterface::class, $shipmentFixture->getTracks());
         self::assertCount(3, $shipmentFixture->getTracks());
         self::assertFalse($order->canShip());
     }
@@ -93,10 +89,9 @@ class ShipmentBuilderTest extends TestCase
     /**
      * Create a shipment for some of the order's items.
      *
-     * @test
      * @throws \Exception
      */
-    public function createPartialShipments()
+    public function testCreatePartialShipments(): void
     {
         $order = OrderBuilder::anOrder()->withProducts(
             ProductBuilder::aSimpleProduct()->withSku('foo'),

@@ -38,7 +38,7 @@ class OrderFixturePoolRollbackTest extends TestCase
         $this->orderRepository = Bootstrap::getObjectManager()->create(OrderRepositoryInterface::class);
     }
 
-    public function testRollbackRemovesOrdersFromPool()
+    public function testRollbackRemovesOrdersFromPool(): void
     {
         $this->orderFixtures->add(self::$order);
         $this->orderFixtures->rollback();
@@ -46,7 +46,7 @@ class OrderFixturePoolRollbackTest extends TestCase
         $this->orderFixtures->get();
     }
 
-    public function testRollbackWorksWithKeys()
+    public function testRollbackWorksWithKeys(): void
     {
         $this->orderFixtures->add(self::$order, 'key');
         $this->orderFixtures->rollback();
@@ -54,7 +54,7 @@ class OrderFixturePoolRollbackTest extends TestCase
         $this->orderFixtures->get();
     }
 
-    public function testRollbackDeletesOrdersFromDb()
+    public function testRollbackDeletesOrdersFromDb(): void
     {
         $this->orderFixtures->add(self::$order);
         $this->orderFixtures->rollback();

@@ -31,7 +31,7 @@ class ProductFixturePoolTest extends TestCase
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
-    public function testLastProductFixtureReturnedByDefault()
+    public function testLastProductFixtureReturnedByDefault(): void
     {
         $firstProduct = $this->createProduct();
         $lastProduct = $this->createProduct();
@@ -41,13 +41,13 @@ class ProductFixturePoolTest extends TestCase
         $this->assertEquals($lastProduct->getSku(), $productFixture->getSku());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyProductPool()
+    public function testExceptionThrownWhenAccessingEmptyProductPool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->productFixtures->get();
     }
 
-    public function testProductFixtureReturnedByKey()
+    public function testProductFixtureReturnedByKey(): void
     {
         $firstProduct = $this->createProduct();
         $lastProduct = $this->createProduct();
@@ -57,7 +57,7 @@ class ProductFixturePoolTest extends TestCase
         $this->assertEquals($firstProduct->getSku(), $productFixture->getSku());
     }
 
-    public function testProductFixtureReturnedByNumericKey()
+    public function testProductFixtureReturnedByNumericKey(): void
     {
         $firstProduct = $this->createProduct();
         $lastProduct = $this->createProduct();
@@ -67,7 +67,7 @@ class ProductFixturePoolTest extends TestCase
         $this->assertEquals($firstProduct->getSku(), $productFixture->getSku());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $product = $this->createProduct();
         $this->productFixtures->add($product, 'foo');
@@ -75,7 +75,7 @@ class ProductFixturePoolTest extends TestCase
         $this->productFixtures->get('bar');
     }
 
-    public function testRollbackRemovesProductsFromPool()
+    public function testRollbackRemovesProductsFromPool(): void
     {
         $product = $this->createProductInDb();
         $this->productFixtures->add($product);
@@ -84,7 +84,7 @@ class ProductFixturePoolTest extends TestCase
         $this->productFixtures->get();
     }
 
-    public function testRollbackWorksWithKeys()
+    public function testRollbackWorksWithKeys(): void
     {
         $product = $this->createProductInDb();
         $this->productFixtures->add($product, 'key');
@@ -93,7 +93,7 @@ class ProductFixturePoolTest extends TestCase
         $this->productFixtures->get();
     }
 
-    public function testRollbackDeletesProductsFromDb()
+    public function testRollbackDeletesProductsFromDb(): void
     {
         $product = $this->createProductInDb();
         $this->productFixtures->add($product);

@@ -194,9 +194,9 @@ class AddressBuilder
         $countryCode = substr($locale, -2);
 
         try {
-            $region = $faker->province;
+            $region = $faker->format('province');
         } catch (InvalidArgumentException $exception) {
-            $region = $faker->state;
+            $region = $faker->format('state');
         }
 
         $city = preg_replace(static::CITY_REPLACE_PATTERN, '', $faker->city ?? '');

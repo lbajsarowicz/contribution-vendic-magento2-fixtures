@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ThemeFixtureTest extends TestCase
 {
-    public function testSetCurrentFrontendTheme()
+    public function testSetCurrentFrontendTheme(): void
     {
         ThemeFixture::setCurrentTheme('Magento/blank');
         /** @var DesignInterface $design */
@@ -22,7 +22,7 @@ class ThemeFixtureTest extends TestCase
         $this->assertEquals('Magento/blank', $design->getDesignTheme()->getCode());
     }
 
-    public function testCanUseTestThemeAfterRegistering()
+    public function testCanUseTestThemeAfterRegistering(): void
     {
         ThemeFixture::registerTestThemes();
         ThemeFixture::setCurrentTheme('Custom/default');

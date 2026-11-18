@@ -9,19 +9,15 @@ use Magento\Catalog\Api\Data\ProductWebsiteLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Indexer\Model\IndexerFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Throwable;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
- */
 class ProductBuilder
 {
     /**
@@ -29,10 +25,8 @@ class ProductBuilder
      */
     private $productRepository;
 
-    /**
-     * @var StockItemRepositoryInterface
-     */
-    private $stockItemRepository;
+    /** @var ProductResource */
+    private $productResource;
 
     /**
      * @var ProductWebsiteLinkRepositoryInterface
@@ -71,27 +65,27 @@ class ProductBuilder
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param StockItemRepositoryInterface $stockItemRepository
      * @param ProductWebsiteLinkRepositoryInterface $websiteLinkRepository
      * @param ProductWebsiteLinkInterfaceFactory $websiteLinkFactory
      * @param IndexerFactory $indexerFactory
      * @param Product $product
      * @param int[] $websiteIds
      * @param mixed[] $storeSpecificValues
+     * @param ProductResource $productResource
      */
-    final public function __construct(
+    public function __construct(
         ProductRepositoryInterface $productRepository,
-        StockItemRepositoryInterface $stockItemRepository,
         ProductWebsiteLinkRepositoryInterface $websiteLinkRepository,
         ProductWebsiteLinkInterfaceFactory $websiteLinkFactory,
         IndexerFactory $indexerFactory,
         Product $product,
         array $websiteIds,
-        array $storeSpecificValues
+        array $storeSpecificValues,
+        ProductResource $productResource
     ) {
         $this->productRepository = $productRepository;
+        $this->productResource = $productResource;
         $this->websiteLinkRepository = $websiteLinkRepository;
-        $this->stockItemRepository = $stockItemRepository;
         $this->websiteLinkFactory = $websiteLinkFactory;
         $this->indexerFactory = $indexerFactory;
         $this->product = $product;
@@ -132,15 +126,15 @@ class ProductBuilder
             $product->getExtensionAttributes()->setStockItem($stockItem)
         );
 
-        return new static(
+        return new self(
             $objectManager->create(ProductRepositoryInterface::class),
-            $objectManager->create(StockItemRepositoryInterface::class),
             $objectManager->create(ProductWebsiteLinkRepositoryInterface::class),
             $objectManager->create(ProductWebsiteLinkInterfaceFactory::class),
             $objectManager->create(IndexerFactory::class),
             $product,
             [1],
-            []
+            [],
+            $objectManager->create(ProductResource::class)
         );
     }
 
@@ -304,7 +298,6 @@ class ProductBuilder
             $this->indexerFactory->create()->load('cataloginventory_stock')->reindexRow($product->getId());
             return $product;
         } catch (Exception $e) {
-            $e->getPrevious();
             if (self::isTransactionException($e) || self::isTransactionException($e->getPrevious())) {
                 throw IndexFailed::becauseInitiallyTriggeredInTransaction($e);
             }
@@ -349,7 +342,7 @@ class ProductBuilder
             $storeProduct = clone $product;
             $storeProduct->setStoreId($storeId);
             $storeProduct->addData($values);
-            $storeProduct->save();
+            $builder->productResource->save($storeProduct);
         }
         return $product;
     }

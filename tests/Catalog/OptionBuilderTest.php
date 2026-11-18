@@ -19,9 +19,10 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionBuilderTest extends TestCase
 {
+    /** @var OptionFixture[] */
     private $options = [];
 
-    /** @var AttributeOptionManagementoptionManagemente */
+    /** @var AttributeOptionManagementInterface */
     private $optionManagement;
 
     /** @var OptionResource */
@@ -83,7 +84,11 @@ class OptionBuilderTest extends TestCase
         $option = $this->optionFactory->create();
         $this->optionResourceModel->load($option, $optionFixture->getOption()->getId());
 
-        $items = $this->optionManagement->getItems(Product::ENTITY, $userDefinedAttributeCode);
+        $items = $this->optionManagement->getItems(
+            (int)Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
+                ->getEntityType(Product::ENTITY)->getId(),
+            $userDefinedAttributeCode
+        );
 
         self::assertEquals($optionFixture->getOption()->getId(), $option->getId());
         $foundLabel = false;

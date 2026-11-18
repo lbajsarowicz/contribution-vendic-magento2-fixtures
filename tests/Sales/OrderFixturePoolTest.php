@@ -23,7 +23,7 @@ class OrderFixturePoolTest extends TestCase
         $this->orderFixtures = new OrderFixturePool();
     }
 
-    public function testLastOrderFixtureReturnedByDefault()
+    public function testLastOrderFixtureReturnedByDefault(): void
     {
         $firstOrder = $this->createOrder();
         $lastOrder = $this->createOrder();
@@ -33,13 +33,13 @@ class OrderFixturePoolTest extends TestCase
         $this->assertEquals($lastOrder->getId(), $orderFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyOrderPool()
+    public function testExceptionThrownWhenAccessingEmptyOrderPool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->orderFixtures->get();
     }
 
-    public function testOrderFixtureReturnedByKey()
+    public function testOrderFixtureReturnedByKey(): void
     {
         $firstOrder = $this->createOrder();
         $lastOrder = $this->createOrder();
@@ -49,7 +49,7 @@ class OrderFixturePoolTest extends TestCase
         $this->assertEquals($firstOrder->getId(), $orderFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $order = $this->createOrder();
         $this->orderFixtures->add($order, 'foo');

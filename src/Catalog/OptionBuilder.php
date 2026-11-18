@@ -6,14 +6,13 @@ namespace TddWizard\Fixtures\Catalog;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\Eav\Model\Entity\Attribute\Option as AttributeOption;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Create a source-model option for an attribute.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OptionBuilder
 {
@@ -38,6 +37,9 @@ class OptionBuilder
      */
     private $attributeCode;
 
+    /** @var int */
+    private $entityTypeId;
+
     /**
      * OptionBuilder constructor.
      *
@@ -45,17 +47,20 @@ class OptionBuilder
      * @param AttributeOption $option
      * @param AttributeOptionLabelInterface $optionLabel
      * @param string $attributeCode
+     * @param int $entityTypeId
      */
     public function __construct(
         AttributeOptionManagementInterface $optionManagement,
         AttributeOption $option,
         AttributeOptionLabelInterface $optionLabel,
-        string $attributeCode
+        string $attributeCode,
+        int $entityTypeId
     ) {
         $this->optionManagement = $optionManagement;
         $this->option = $option;
         $this->optionLabel = $optionLabel;
         $this->attributeCode = $attributeCode;
+        $this->entityTypeId = $entityTypeId;
     }
 
     /**
@@ -79,7 +84,8 @@ class OptionBuilder
         $objectManager = Bootstrap::getObjectManager();
         /** @var AttributeOptionManagementInterface $optionManagement */
         $optionManagement = $objectManager->create(AttributeOptionManagementInterface::class);
-        $items = $optionManagement->getItems(Product::ENTITY, $attributeCode);
+        $entityTypeId = (int)$objectManager->get(EavConfig::class)->getEntityType(Product::ENTITY)->getId();
+        $items = $optionManagement->getItems($entityTypeId, $attributeCode);
 
         /** @var AttributeOptionLabelInterface $optionLabel */
         $optionLabel = $objectManager->create(AttributeOptionLabelInterface::class);
@@ -94,11 +100,12 @@ class OptionBuilder
         $option->setSortOrder(count($items) + 1);
         $option->setIsDefault(false);
 
-        return new static(
+        return new self(
             $optionManagement,
             $option,
             $optionLabel,
-            $attributeCode
+            $attributeCode,
+            $entityTypeId
         );
     }
 
@@ -173,7 +180,7 @@ class OptionBuilder
 
         // add the option
         $this->optionManagement->add(
-            \Magento\Catalog\Model\Product::ENTITY,
+            $this->entityTypeId,
             $builder->attributeCode,
             $builder->option
         );

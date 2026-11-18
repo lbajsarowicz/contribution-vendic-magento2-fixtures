@@ -187,7 +187,7 @@ class CustomerBuilderTest extends TestCase
         );
 
         $addresses = $this->customerRepository->getById($customerFixture->getId())->getAddresses();
-        /** @var AddressInterface $firstAddress */
+        /** @var AddressInterface $onlyAddress */
         $onlyAddress = reset($addresses);
         self::assertSame($onlyAddress->getVatId(), $vatId);
     }

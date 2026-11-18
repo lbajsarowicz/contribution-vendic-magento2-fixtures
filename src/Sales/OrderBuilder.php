@@ -18,7 +18,7 @@ use TddWizard\Fixtures\Customer\CustomerFixture;
 class OrderBuilder
 {
     /**
-     * @var CartBuilder
+     * @var CartBuilder|null
      */
     private $cartBuilder;
 
@@ -28,7 +28,7 @@ class OrderBuilder
     private $productBuilders;
 
     /**
-     * @var CustomerBuilder
+     * @var CustomerBuilder|null
      */
     private $customerBuilder;
 
@@ -42,8 +42,8 @@ class OrderBuilder
      */
     private $customer;
 
-    final public function __construct(
-        CustomerInterface|null $customer = null
+    public function __construct(
+        ?CustomerInterface $customer = null
     ) {
         $this->customer = $customer;
     }
@@ -55,12 +55,12 @@ class OrderBuilder
 
     public static function anOrder(): OrderBuilder
     {
-        return new static();
+        return new self();
     }
 
     public static function anOrderFor(CustomerInterface $customer): OrderBuilder
     {
-        return new static($customer);
+        return new self($customer);
     }
 
     public function withProducts(ProductBuilder ...$productBuilders): OrderBuilder

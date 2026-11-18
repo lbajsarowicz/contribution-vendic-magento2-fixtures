@@ -31,7 +31,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
     }
 
-    public function testLastCategoryFixtureReturnedByDefault()
+    public function testLastCategoryFixtureReturnedByDefault(): void
     {
         $firstCategory = $this->createCategory();
         $lastCategory = $this->createCategory();
@@ -41,13 +41,13 @@ class CategoryFixturePoolTest extends TestCase
         $this->assertEquals($lastCategory->getId(), $categoryFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyCategoryPool()
+    public function testExceptionThrownWhenAccessingEmptyCategoryPool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->categoryFixtures->get();
     }
 
-    public function testCategoryFixtureReturnedByKey()
+    public function testCategoryFixtureReturnedByKey(): void
     {
         $firstCategory = $this->createCategory();
         $lastCategory = $this->createCategory();
@@ -57,7 +57,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->assertEquals($firstCategory->getId(), $categoryFixture->getId());
     }
 
-    public function testCategoryFixtureReturnedByNumericKey()
+    public function testCategoryFixtureReturnedByNumericKey(): void
     {
         $firstCategory = $this->createCategory();
         $lastCategory = $this->createCategory();
@@ -67,7 +67,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->assertEquals($firstCategory->getId(), $categoryFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $category = $this->createCategory();
         $this->categoryFixtures->add($category, 'foo');
@@ -75,7 +75,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->categoryFixtures->get('bar');
     }
 
-    public function testRollbackRemovesCategorysFromPool()
+    public function testRollbackRemovesCategorysFromPool(): void
     {
         $category = $this->createCategoryInDb();
         $this->categoryFixtures->add($category);
@@ -84,7 +84,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->categoryFixtures->get();
     }
 
-    public function testRollbackWorksWithKeys()
+    public function testRollbackWorksWithKeys(): void
     {
         $category = $this->createCategoryInDb();
         $this->categoryFixtures->add($category, 'key');
@@ -93,7 +93,7 @@ class CategoryFixturePoolTest extends TestCase
         $this->categoryFixtures->get();
     }
 
-    public function testRollbackDeletesCategorysFromDb()
+    public function testRollbackDeletesCategorysFromDb(): void
     {
         $category = $this->createCategoryInDb();
         $this->categoryFixtures->add($category);

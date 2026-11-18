@@ -31,7 +31,7 @@ class ConfigFixture
      *
      * @param string $path
      * @param mixed $value
-     * @param null $storeCode store code or NULL for current store
+     * @param string|null $storeCode store code or NULL for current store
      */
     public static function setForStore(string $path, $value, $storeCode = null) : void
     {

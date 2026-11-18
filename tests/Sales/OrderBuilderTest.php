@@ -50,10 +50,9 @@ class OrderBuilderTest extends TestCase
      *
      * Easy to set up, least flexible.
      *
-     * @test
      * @throws \Exception
      */
-    public function createOrder()
+    public function testCreateOrder(): void
     {
         $orderFixture = new OrderFixture(
             OrderBuilder::anOrder()->build()
@@ -69,10 +68,9 @@ class OrderBuilderTest extends TestCase
      *
      * Control the product included with the order, use random item quantities.
      *
-     * @test
      * @throws \Exception
      */
-    public function createOrderWithProduct()
+    public function testCreateOrderWithProduct(): void
     {
         $orderFixture = new OrderFixture(
             OrderBuilder::anOrder()->withProducts(ProductBuilder::aSimpleProduct())->build()
@@ -88,10 +86,9 @@ class OrderBuilderTest extends TestCase
      *
      * Control the products included with the order, use random item quantities.
      *
-     * @test
      * @throws \Exception
      */
-    public function createOrderWithProducts()
+    public function testCreateOrderWithProducts(): void
     {
         $orderFixture = new OrderFixture(
             OrderBuilder::anOrder()->withProducts(
@@ -110,10 +107,9 @@ class OrderBuilderTest extends TestCase
      *
      * Control the customer placing the order.
      *
-     * @test
      * @throws \Exception
      */
-    public function createOrderWithCustomer()
+    public function testCreateOrderWithCustomer(): void
     {
         $customerEmail = 'test@example.com';
         $customerBuilder = CustomerBuilder::aCustomer()
@@ -139,10 +135,9 @@ class OrderBuilderTest extends TestCase
      * - set item quantities
      * - set payment and shipping method
      *
-     * @test
      * @throws \Exception
      */
-    public function createOrderWithCart()
+    public function testCreateOrderWithCart(): void
     {
         $cartItems = ['foo' => 2, 'bar' => 3];
         $customerEmail = 'test@example.com';
@@ -184,10 +179,9 @@ class OrderBuilderTest extends TestCase
     /**
      * Create multiple orders. Assert all of them were successfully built.
      *
-     * @test
      * @throws \Exception
      */
-    public function createMultipleOrders()
+    public function testCreateMultipleOrders(): void
     {
         $shippingMethod = 'flatrate_flatrate';
 
@@ -239,10 +233,9 @@ class OrderBuilderTest extends TestCase
     /**
      * Create orders for faker addresses with either state or province. Assert both types have a `region_id` assigned.
      *
-     * @test
      * @throws \Exception
      */
-    public function createIntlOrders()
+    public function testCreateIntlOrders(): void
     {
         $atLocale = 'de_AT';
         $atOrder = OrderBuilder::anOrder()

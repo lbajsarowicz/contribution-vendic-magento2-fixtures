@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace TddWizard\Fixtures\Catalog;
 
 use Magento\Catalog\Api\CategoryLinkRepositoryInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory;
 use Magento\Catalog\Model\Category;
@@ -13,11 +12,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 class CategoryBuilder
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
     /**
      * @var CategoryResource
      */
@@ -44,7 +38,6 @@ class CategoryBuilder
     private $skus;
 
     /**
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param CategoryResource $categoryResource
      * @param CategoryLinkRepositoryInterface $categoryLinkRepository
      * @param CategoryProductLinkInterfaceFactory $productLinkFactory
@@ -52,14 +45,12 @@ class CategoryBuilder
      * @param string[] $skus
      */
     public function __construct(
-        CategoryRepositoryInterface $categoryRepository,
         CategoryResource $categoryResource,
         CategoryLinkRepositoryInterface $categoryLinkRepository,
         CategoryProductLinkInterfaceFactory $productLinkFactory,
         Category $category,
         array $skus
     ) {
-        $this->categoryRepository = $categoryRepository;
         $this->categoryResource = $categoryResource;
         $this->categoryLinkRepository = $categoryLinkRepository;
         $this->productLinkFactory = $productLinkFactory;
@@ -80,7 +71,6 @@ class CategoryBuilder
         $category->setPath('1/2');
 
         return new self(
-            $objectManager->create(CategoryRepositoryInterface::class),
             $objectManager->create(CategoryResource::class),
             $objectManager->create(CategoryLinkRepositoryInterface::class),
             $objectManager->create(CategoryProductLinkInterfaceFactory::class),
@@ -102,7 +92,6 @@ class CategoryBuilder
         $category->setPath((string)$parent->getCategory()->getPath());
 
         return new self(
-            $objectManager->create(CategoryRepositoryInterface::class),
             $objectManager->create(CategoryResource::class),
             $objectManager->create(CategoryLinkRepositoryInterface::class),
             $objectManager->create(CategoryProductLinkInterfaceFactory::class),

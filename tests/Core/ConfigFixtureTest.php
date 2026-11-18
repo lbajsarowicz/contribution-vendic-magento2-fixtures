@@ -35,7 +35,7 @@ class ConfigFixtureTest extends TestCase
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
     }
 
-    public function testSetGlobalChangesDefaultScope()
+    public function testSetGlobalChangesDefaultScope(): void
     {
         ConfigFixture::setGlobal(self::STORE_NAME_PATH, 'Ye Olde Wizard Shop');
         $this->assertConfigValue(
@@ -48,7 +48,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @magentoAppArea frontend
      */
-    public function testSetGlobalOverridesAllScopes()
+    public function testSetGlobalOverridesAllScopes(): void
     {
         $this->givenStoreValue(self::STORE_NAME_PATH, 'Store Override');
         $this->givenWebsiteValue(self::STORE_NAME_PATH, 'Website Override');
@@ -60,7 +60,7 @@ class ConfigFixtureTest extends TestCase
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Store/_files/second_store.php
      */
-    public function testSetForStoreWithCurrentStore()
+    public function testSetForStoreWithCurrentStore(): void
     {
         $this->storeManager->setCurrentStore(self::SECOND_STORE_ID_FROM_FIXTURE);
         ConfigFixture::setForStore(self::STORE_NAME_PATH, 'Store store');
@@ -76,7 +76,7 @@ class ConfigFixtureTest extends TestCase
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Store/_files/second_store.php
      */
-    public function testSetForStoreWithExplicitStore()
+    public function testSetForStoreWithExplicitStore(): void
     {
         ConfigFixture::setForStore(self::STORE_NAME_PATH, 'Store 1', self::FIRST_STORE_ID);
         ConfigFixture::setForStore(self::STORE_NAME_PATH, 'Store 2', self::SECOND_STORE_ID_FROM_FIXTURE);
@@ -104,7 +104,7 @@ class ConfigFixtureTest extends TestCase
         $this->scopeConfig->setValue($path, $websiteValue, ScopeInterface::SCOPE_WEBSITE);
     }
 
-    private function assertConfigValue($expectedValue, string $path, string $scope, ?string $scopeCode = null): void
+    private function assertConfigValue(string $expectedValue, string $path, string $scope, ?string $scopeCode = null): void
     {
         $this->assertEquals(
             $expectedValue,

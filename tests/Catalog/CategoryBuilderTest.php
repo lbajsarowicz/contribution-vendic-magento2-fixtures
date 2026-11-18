@@ -50,7 +50,7 @@ class CategoryBuilderTest extends TestCase
         }
     }
 
-    public function testDefaultTopLevelCategory()
+    public function testDefaultTopLevelCategory(): void
     {
         $categoryFixture = new CategoryFixture(
             CategoryBuilder::topLevelCategory()->build()
@@ -73,7 +73,7 @@ class CategoryBuilderTest extends TestCase
         );
     }
 
-    public function testDefaultChildCategory()
+    public function testDefaultChildCategory(): void
     {
         $parentCategoryFixture = new CategoryFixture(
             CategoryBuilder::topLevelCategory()->build()
@@ -99,7 +99,7 @@ class CategoryBuilderTest extends TestCase
         );
     }
 
-    public function testCategoryWithSpecificAttributes()
+    public function testCategoryWithSpecificAttributes(): void
     {
         $categoryFixture = new CategoryFixture(
             CategoryBuilder::topLevelCategory()
@@ -123,7 +123,7 @@ class CategoryBuilderTest extends TestCase
         );
     }
 
-    public function testCategoryWithProducts()
+    public function testCategoryWithProducts(): void
     {
         $product1 = new ProductFixture(ProductBuilder::aSimpleProduct()->build());
         $product2 = new ProductFixture(ProductBuilder::aSimpleProduct()->build());
@@ -144,7 +144,7 @@ class CategoryBuilderTest extends TestCase
         );
     }
 
-    public function testMultipleCategories()
+    public function testMultipleCategories(): void
     {
         $this->categories[0] = new CategoryFixture(
             CategoryBuilder::topLevelCategory()->build()

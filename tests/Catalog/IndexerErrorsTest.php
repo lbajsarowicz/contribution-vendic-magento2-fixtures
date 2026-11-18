@@ -2,10 +2,8 @@
 
 namespace TddWizard\Fixtures\Catalog;
 
-use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -16,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexerErrorsTest extends TestCase
 {
+    /** @var bool */
     private static $indexIsScheduledOrig;
 
     /**
@@ -23,30 +22,12 @@ class IndexerErrorsTest extends TestCase
      *             happens again
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      */
-    public function testHelpfulErrorMessageForFulltextIndexSchedule()
+    public function testHelpfulErrorMessageForFulltextIndexSchedule(): void
     {
         $this->markTestSkipped('Since Magento 2.3.6 / 2.4.1 these transaction exceptions do not occur anymore');
-        $this->expectException(\Exception::class);
-
-        try {
-            /** @var StoreManagerInterface $storeManager */
-            $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-            $secondWebsiteId = $storeManager->getWebsite('test')->getId();
-            ProductBuilder::aSimpleProduct()->withWebsiteIds([$secondWebsiteId])->build();
-        } catch (\Exception $exception) {
-            // manual check, there is no common assertion in PHPUnit 6 / PHPUnit 9
-            $this->assertNotFalse(
-                preg_match(
-                    '{@magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php}',
-                    $exception->getMessage()
-                )
-            );
-
-            throw $exception;
-        }
     }
 
-    public static function disableReindexSchedule()
+    public static function disableReindexSchedule(): void
     {
         /* @var IndexerInterface $model */
         $model = Bootstrap::getObjectManager()->get(IndexerRegistry::class)->get('catalogsearch_fulltext');
@@ -54,7 +35,7 @@ class IndexerErrorsTest extends TestCase
         $model->setScheduled(false);
     }
 
-    public static function disableReindexScheduleRollback()
+    public static function disableReindexScheduleRollback(): void
     {
         /* @var IndexerInterface $model */
         $model = Bootstrap::getObjectManager()->get(IndexerRegistry::class)->get('catalogsearch_fulltext');

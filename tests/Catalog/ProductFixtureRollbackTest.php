@@ -24,7 +24,7 @@ class ProductFixtureRollbackTest extends TestCase
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
-    public function testRollbackSingleProductFixture()
+    public function testRollbackSingleProductFixture(): void
     {
         $productFixture = new ProductFixture(
             ProductBuilder::aSimpleProduct()->build()
@@ -34,7 +34,7 @@ class ProductFixtureRollbackTest extends TestCase
         $this->productRepository->getById($productFixture->getId());
     }
 
-    public function testRollbackMultipleProductFixtures()
+    public function testRollbackMultipleProductFixtures(): void
     {
         $productFixture = new ProductFixture(
             ProductBuilder::aSimpleProduct()->build()

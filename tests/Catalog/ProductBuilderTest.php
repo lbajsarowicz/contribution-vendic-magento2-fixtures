@@ -50,7 +50,7 @@ class ProductBuilderTest extends TestCase
         }
     }
 
-    public function testDefaultSimpleProduct()
+    public function testDefaultSimpleProduct(): void
     {
         $productFixture = new ProductFixture(
             ProductBuilder::aSimpleProduct()->build()
@@ -71,7 +71,7 @@ class ProductBuilderTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      */
-    public function testSimpleProductWithSpecificAttributes()
+    public function testSimpleProductWithSpecificAttributes(): void
     {
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
@@ -126,7 +126,7 @@ class ProductBuilderTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      */
-    public function testSimpleProductWithStoreSpecificAttributes()
+    public function testSimpleProductWithStoreSpecificAttributes(): void
     {
         /*
          * Values from core fixture files
@@ -197,7 +197,7 @@ class ProductBuilderTest extends TestCase
         );
     }
 
-    public function testDefaultVirtualProduct()
+    public function testDefaultVirtualProduct(): void
     {
         $productFixture = new ProductFixture(
             ProductBuilder::aVirtualProduct()->build()
@@ -214,34 +214,34 @@ class ProductBuilderTest extends TestCase
         );
     }
 
-    public function testRandomSkuOnBuild()
+    public function testRandomSkuOnBuild(): void
     {
         $builder = ProductBuilder::aSimpleProduct();
         $productFixture = new ProductFixture(
             $builder->build()
         );
-        $this->assertRegExp('/[0-9a-f]{32}/', $productFixture->getSku());
+        $this->assertMatchesRegularExpression('/[0-9a-f]{32}/', $productFixture->getSku());
         $this->products[] = $productFixture;
 
         $otherProductFixture = new ProductFixture(
             $builder->build()
         );
-        $this->assertRegExp('/[0-9a-f]{32}/', $otherProductFixture->getSku());
+        $this->assertMatchesRegularExpression('/[0-9a-f]{32}/', $otherProductFixture->getSku());
         $this->assertNotEquals($productFixture->getSku(), $otherProductFixture->getSku());
         $this->products[] = $otherProductFixture;
     }
 
-    public function testRandomSkuOnBuildWithoutSave()
+    public function testRandomSkuOnBuildWithoutSave(): void
     {
         $product = ProductBuilder::aSimpleProduct()->buildWithoutSave();
-        $this->assertRegExp('/[0-9a-f]{32}/', $product->getSku());
+        $this->assertMatchesRegularExpression('/[0-9a-f]{32}/', $product->getSku());
 
         $otherProduct = ProductBuilder::aSimpleProduct()->buildWithoutSave();
-        $this->assertRegExp('/[0-9a-f]{32}/', $otherProduct->getSku());
+        $this->assertMatchesRegularExpression('/[0-9a-f]{32}/', $otherProduct->getSku());
         $this->assertNotEquals($product->getSku(), $otherProduct->getSku());
     }
 
-    public function testProductCanBeLoadedWithCollection()
+    public function testProductCanBeLoadedWithCollection(): void
     {
         $productFixture = new ProductFixture(
             ProductBuilder::aSimpleProduct()->build()

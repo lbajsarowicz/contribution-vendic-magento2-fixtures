@@ -30,7 +30,7 @@ class CustomerFixturePoolTest extends TestCase
         $this->customerRepository = Bootstrap::getObjectManager()->create(CustomerRepositoryInterface::class);
     }
 
-    public function testLastCustomerFixtureReturnedByDefault()
+    public function testLastCustomerFixtureReturnedByDefault(): void
     {
         $firstCustomer = $this->createCustomer();
         $lastCustomer = $this->createCustomer();
@@ -40,13 +40,13 @@ class CustomerFixturePoolTest extends TestCase
         $this->assertEquals($lastCustomer->getId(), $customerFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyCustomerPool()
+    public function testExceptionThrownWhenAccessingEmptyCustomerPool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->customerFixtures->get();
     }
 
-    public function testCustomerFixtureReturnedByKey()
+    public function testCustomerFixtureReturnedByKey(): void
     {
         $firstCustomer = $this->createCustomer();
         $lastCustomer = $this->createCustomer();
@@ -56,7 +56,7 @@ class CustomerFixturePoolTest extends TestCase
         $this->assertEquals($firstCustomer->getId(), $customerFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $customer = $this->createCustomer();
         $this->customerFixtures->add($customer, 'foo');
@@ -64,7 +64,7 @@ class CustomerFixturePoolTest extends TestCase
         $this->customerFixtures->get('bar');
     }
 
-    public function testRollbackRemovesCustomersFromPool()
+    public function testRollbackRemovesCustomersFromPool(): void
     {
         $customer = $this->createCustomerInDb();
         $this->customerFixtures->add($customer);
@@ -72,13 +72,13 @@ class CustomerFixturePoolTest extends TestCase
         $this->expectException(\OutOfBoundsException::class);
         $this->customerFixtures->get();
     }
-    public function testRollbackDeletesCustomersFromDb()
+    public function testRollbackDeletesCustomersFromDb(): void
     {
         $customer = $this->createCustomerInDb();
         $this->customerFixtures->add($customer);
         $this->customerFixtures->rollback();
         $this->expectException(NoSuchEntityException::class);
-        $this->customerRepository->get($customer->getId());
+        $this->customerRepository->getById($customer->getId());
     }
 
     /**

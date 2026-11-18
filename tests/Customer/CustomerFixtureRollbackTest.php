@@ -23,7 +23,7 @@ class CustomerFixtureRollbackTest extends TestCase
         $this->customerRepository = Bootstrap::getObjectManager()->create(CustomerRepositoryInterface::class);
     }
 
-    public function testRollbackSingleCustomerFixture()
+    public function testRollbackSingleCustomerFixture(): void
     {
         $customerFixture = new CustomerFixture(
             CustomerBuilder::aCustomer()->build()
@@ -33,7 +33,7 @@ class CustomerFixtureRollbackTest extends TestCase
         $this->customerRepository->getById($customerFixture->getId());
     }
 
-    public function testRollbackMultipleCustomerFixtures()
+    public function testRollbackMultipleCustomerFixtures(): void
     {
         $customerFixture = new CustomerFixture(
             CustomerBuilder::aCustomer()->build()

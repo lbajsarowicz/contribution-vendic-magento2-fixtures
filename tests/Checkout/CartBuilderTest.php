@@ -3,6 +3,7 @@
 namespace TddWizard\Fixtures\Checkout;
 
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use PHPUnit\Framework\TestCase;
 use TddWizard\Fixtures\Catalog\ProductBuilder;
 use TddWizard\Fixtures\Catalog\ProductFixture;
@@ -25,7 +26,7 @@ class CartBuilderTest extends TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testProductCanBeAddedWithCustomBuyRequest()
+    public function testProductCanBeAddedWithCustomBuyRequest(): void
     {
         $qty = 2;
         $customOptionId = 42;
@@ -42,7 +43,7 @@ class CartBuilderTest extends TestCase
         $serializedBuyRequest = $quoteItem->getOptionByCode('info_buyRequest')->getValue();
         if (!json_decode($serializedBuyRequest)) {
             // Magento 2.1 PHP serialization
-            $serializedBuyRequest = json_encode(unserialize($serializedBuyRequest, []));
+            $serializedBuyRequest = json_encode((new Serialize())->unserialize($serializedBuyRequest));
         }
         $this->assertJsonStringEqualsJsonString(
             json_encode(['qty' => $qty, 'options' => ['42' => 'foobar']]),

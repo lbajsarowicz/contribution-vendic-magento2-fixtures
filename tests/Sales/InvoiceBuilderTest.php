@@ -47,11 +47,10 @@ class InvoiceBuilderTest extends TestCase
     /**
      * Create a invoice for all the order's items.
      *
-     * @test
      *
      * @throws \Exception
      */
-    public function createInvoice()
+    public function testCreateInvoice(): void
     {
         $order = OrderBuilder::anOrder()->build();
         $this->orderFixture = new OrderFixture($order);
@@ -65,10 +64,9 @@ class InvoiceBuilderTest extends TestCase
     /**
      * Create an invoice for some of the order's items.
      *
-     * @test
      * @throws \Exception
      */
-    public function createPartialInvoices()
+    public function testCreatePartialInvoices(): void
     {
         $order = OrderBuilder::anOrder()->withProducts(
             ProductBuilder::aSimpleProduct()->withSku('foo'),

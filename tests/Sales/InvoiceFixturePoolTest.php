@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace TddWizard\Fixtures\Sales;
 
 use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -18,18 +17,13 @@ class InvoiceFixturePoolTest extends TestCase
      * @var InvoiceFixturePool
      */
     private $invoiceFixtures;
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
 
     protected function setUp(): void
     {
         $this->invoiceFixtures = new InvoiceFixturePool();
-        $this->invoiceRepository = Bootstrap::getObjectManager()->create(InvoiceRepositoryInterface::class);
     }
 
-    public function testLastInvoiceFixtureReturnedByDefault()
+    public function testLastInvoiceFixtureReturnedByDefault(): void
     {
         $firstInvoice = $this->createInvoice();
         $lastInvoice = $this->createInvoice();
@@ -39,13 +33,13 @@ class InvoiceFixturePoolTest extends TestCase
         $this->assertEquals($lastInvoice->getEntityId(), $invoiceFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyInvoicePool()
+    public function testExceptionThrownWhenAccessingEmptyInvoicePool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->invoiceFixtures->get();
     }
 
-    public function testInvoiceFixtureReturnedByKey()
+    public function testInvoiceFixtureReturnedByKey(): void
     {
         $firstInvoice = $this->createInvoice();
         $lastInvoice = $this->createInvoice();
@@ -55,7 +49,7 @@ class InvoiceFixturePoolTest extends TestCase
         $this->assertEquals($firstInvoice->getEntityId(), $invoiceFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $invoice = $this->createInvoice();
         $this->invoiceFixtures->add($invoice, 'foo');

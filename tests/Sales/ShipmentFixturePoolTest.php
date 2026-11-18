@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace TddWizard\Fixtures\Sales;
 
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -18,18 +17,13 @@ class ShipmentFixturePoolTest extends TestCase
      * @var ShipmentFixturePool
      */
     private $shipmentFixtures;
-    /**
-     * @var ShipmentRepositoryInterface
-     */
-    private $shipmentRepository;
 
     protected function setUp(): void
     {
         $this->shipmentFixtures = new ShipmentFixturePool();
-        $this->shipmentRepository = Bootstrap::getObjectManager()->create(ShipmentRepositoryInterface::class);
     }
 
-    public function testLastShipmentFixtureReturnedByDefault()
+    public function testLastShipmentFixtureReturnedByDefault(): void
     {
         $firstShipment = $this->createShipment();
         $lastShipment = $this->createShipment();
@@ -39,13 +33,13 @@ class ShipmentFixturePoolTest extends TestCase
         $this->assertEquals($lastShipment->getEntityId(), $shipmentFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingEmptyShipmentPool()
+    public function testExceptionThrownWhenAccessingEmptyShipmentPool(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->shipmentFixtures->get();
     }
 
-    public function testShipmentFixtureReturnedByKey()
+    public function testShipmentFixtureReturnedByKey(): void
     {
         $firstShipment = $this->createShipment();
         $lastShipment = $this->createShipment();
@@ -55,7 +49,7 @@ class ShipmentFixturePoolTest extends TestCase
         $this->assertEquals($firstShipment->getEntityId(), $shipmentFixture->getId());
     }
 
-    public function testExceptionThrownWhenAccessingNonexistingKey()
+    public function testExceptionThrownWhenAccessingNonexistingKey(): void
     {
         $shipment = $this->createShipment();
         $this->shipmentFixtures->add($shipment, 'foo');
